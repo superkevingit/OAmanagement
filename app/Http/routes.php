@@ -20,8 +20,10 @@ Route::post('auth/register', 'Auth\AuthController@postRegister');
  * Oauth2
  */
 Route::group(['middleware'=>'auth'], function (){
+    Route::get('oauth/oauth_client/user', 'OauthController@getByUser');
+    Route::get('oauth/oauth_client/create', 'OauthControler@create');
     Route::resource('oauth/oauth_client', 'OauthController', ['only'=>[
-        'index','show','create','store','destroy',
+        'index','create','store','destroy',
     ]]);
     Route::post('oauth/access_token', 'OauthController@postAccessToken');
     Route::get('user/info', 'UserController@info');

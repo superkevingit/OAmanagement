@@ -4,13 +4,32 @@ namespace App\Http\Controllers;
 
 use App\OauthClient;
 use App\OauthClientEndpoint;
+use App\User;
 use Illuminate\Http\Request;
+use DB;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 class OauthController extends Controller
 {
+    public function getByUser()
+    {
+        $oauth_apply = null;
+        $user = \Auth::user();
+        $oauth_apply = $user->oauth_clients->all();
+        return view('oauth.user', compact('oauth_apply'));
+    }
+
+    public function index()
+    {
+        $oauth_clients = null;
+        $OauthCount = (int)DB::table('oauth_clients')->count();
+        $oauth_clients = OauthClient::with('users')->with('endpoints')->take($OauthCount)->get()->toArray();
+//        dd($oauth_clients);
+        return view('oauth.index', compact('oauth_clients'));
+    }
+
     public function create()
     {
        return view('oauth.create');
@@ -18,18 +37,12 @@ class OauthController extends Controller
 
     public function store(Request $request)
     {
-        $client['id'] = str_random(38);
-        $client['secret'] = str_random(38);
-        $client['name'] = $request->get('name');
-        $oauth_client = new OauthClient($client);
-        $oauth_client->save();
-        $secret = $oauth_client->secret;
-        $oauth_client = OauthClient::where('secret', $secret)->first();
-        $oauth_client->endpoints()->save(new OauthClientEndpoint([
-            'redirect_uri' => url('oauth/oauth_client').'/'.\Auth::user()->id.'/code',
-        ]));
-        $oauth_client->users()->save(\Auth::user());
-        return $oauth_client;
+        $secret = (new OauthClient())->apply($request->get('name'));
+        $oauth_client = OauthClient::where('secret', '=', $secret)->first();
+        (new OauthClientEndpoint())->apply($oauth_client);
+        (new User())->apply_oauth_client($oauth_client);
+
+        return redirect(url('oauth/oauth_client/user'));
     }
 
     public function getAuthorize()
