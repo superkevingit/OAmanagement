@@ -13,7 +13,7 @@ class AddUserIdentityToUserOrganizationTable extends Migration
     public function up()
     {
         Schema::table('user_organization', function (Blueprint $table) {
-            $table->string('identity')->default('member');
+            $table->enum('identity',['root', 'admin', 'member'])->default('member');
         });
     }
 

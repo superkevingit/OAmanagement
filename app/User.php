@@ -36,4 +36,9 @@ class User extends Model implements AuthenticatableContract,
      * @var array
      */
     protected $hidden = ['password', 'remember_token'];
+
+    public function oauth_clients()
+    {
+        return $this->belongsToMany('App\OauthClient', 'user_oauth_client');
+    }
 }
