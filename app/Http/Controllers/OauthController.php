@@ -13,6 +13,12 @@ use App\Http\Controllers\Controller;
 
 class OauthController extends Controller
 {
+    public function getCode(Request $request)
+    {
+        $code = $request->get('code');
+        return view('oauth/code', compact('code'));
+    }
+    
     public function update($oauth_client)
     {
         $client = DB::table('user_oauth_client')->where('oauth_client_id', '=', $oauth_client);
@@ -23,7 +29,7 @@ class OauthController extends Controller
     public function destroy($oauth_client)
     {
         OauthClient::find($oauth_client)->delete();
-        redirect(url('oauth/oauth_client'));
+        return redirect(url('oauth/oauth_client'));
     }
 
     public function getByUser()
@@ -38,8 +44,7 @@ class OauthController extends Controller
     {
         $oauth_clients = null;
         $OauthCount = (int)DB::table('oauth_clients')->count();
-        $oauth_clients = OauthClient::with('users')->with('endpoints')->take($OauthCount)->get()->toArray();
-//        dd($oauth_clients);
+        $oauth_clients = OauthClient::with('users')->with('endpoints')->take($OauthCount)->orderBy('created_at', 'desc')->get()->toArray();
         return view('oauth.index', compact('oauth_clients'));
     }
 
@@ -58,33 +63,4 @@ class OauthController extends Controller
         return redirect(url('oauth/oauth_client/user'));
     }
 
-    public function getAuthorize()
-    {
-        $authParams = Authorizer::getAuthCodeRequestParams();
-        $formParams = array_except($authParams,'client');
-        $formParams['client_id'] = $authParams['client']->getId();
-        $formParams['scope'] = implode(config('oauth2.scope_delimiter'), array_map(function ($scope) {
-            return $scope->getId();
-        }, $authParams['scopes']));
-        return view('oauth.authorization-form', ['params' => $formParams, 'client' => $authParams['client']]);
-    }
-
-    public function postAuthorize()
-    {
-        $params = Authorizer::getAuthCodeRequestParams();
-        $params['user_id'] = Auth::user()->id;
-        $redirectUri = '/';
-        if (Request::has('approve')) {
-            $redirectUri = Authorizer::issueAuthCode('user', $params['user_id'], $params);
-        }
-        if (Request::has('deny')) {
-            $redirectUri = Authorizer::authCodeRequestDeniedRedirectUri();
-        }
-        return Redirect::to($redirectUri);
-    }
-
-    public function postAccessToken()
-    {
-        return Response::json(Authorizer::issueAccessToken());
-    }
 }

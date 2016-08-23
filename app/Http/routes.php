@@ -18,6 +18,7 @@ Route::group(['prefix'=>'auth'], function (){
 Route::group(['middleware'=>'auth'], function (){
     //Oauth
     Route::group(['prefix'=>'oauth'], function (){
+        Route::get('oauth_client/code', 'OauthController@getCode');
         Route::get('oauth_client/user', 'OauthController@getByUser');
         Route::get('oauth_client/create', 'OauthController@create');
         Route::post('oauth_client', 'OauthController@store');
@@ -28,8 +29,18 @@ Route::group(['middleware'=>'auth'], function (){
             ]]);
         });
         Route::group(['middleware'=>['check-authorization-params']], function (){
-            Route::get('authorize', 'OauthController@getAuthorize');
-            Route::post('authorize', 'OauthController@postAuthorize');//may need csrf middleware!
+            Route::post('authorize', ['as' => 'oauth.authorize.post', function() {
+                $params = Authorizer::getAuthCodeRequestParams();
+                $params['user_id'] = Auth::user()->id;
+                $redirectUri = '/';
+                if (Request::has('approve')) {
+                    $redirectUri = Authorizer::issueAuthCode('user', $params['user_id'], $params);
+                }
+                if (Request::has('deny')) {
+                    $redirectUri = Authorizer::authCodeRequestDeniedRedirectUri();
+                }
+                return Redirect::to($redirectUri);
+            }]);
         });
     });
 
@@ -50,6 +61,9 @@ $api->version('v1', function ($api) {
     $api->group(['namespace'=>'App\Api\Controllers', 'prefix'=>'v1'], function ($api){
         $api->post('user/register', 'AuthController@register');
         $api->post('user/login', 'AuthController@authenticate');
+        $api->post('oauth/access_token', function() {
+            return Response::json(Authorizer::issueAccessToken());
+        });
 
         $api->group(['middleware'=>['jwt.auth', 'oauth']], function ($api){
             $api->get('user/me', 'AuthController@getAuthenticatedUser');
