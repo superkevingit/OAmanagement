@@ -13,6 +13,19 @@ use App\Http\Controllers\Controller;
 
 class OauthController extends Controller
 {
+    public function update($oauth_client)
+    {
+        $client = DB::table('user_oauth_client')->where('oauth_client_id', '=', $oauth_client);
+        $client->update(['confirmed'=>1]);
+        return redirect(url('oauth/oauth_client'));
+    }
+
+    public function destroy($oauth_client)
+    {
+        OauthClient::find($oauth_client)->delete();
+        redirect(url('oauth/oauth_client'));
+    }
+
     public function getByUser()
     {
         $oauth_apply = null;

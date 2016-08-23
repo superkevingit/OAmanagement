@@ -1,36 +1,43 @@
 <?php
 
 /*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register all of the routes for an application.
-| It's a breeze. Simply tell Laravel the URIs it should respond to
-| and give it the controller to call when that URI is requested.
-|
-*/
-Route::get('auth/login', 'Auth\AuthController@getLogin');
-Route::post('auth/login', 'Auth\AuthController@postLogin');
-Route::get('auth/logout', 'Auth\AuthController@getLogout');
-Route::get('auth/register', 'Auth\AuthController@getRegister');
-Route::post('auth/register', 'Auth\AuthController@postRegister');
+ * OAsystem Web no need auth
+ */
+Route::group(['prefix'=>'auth'], function (){
+    Route::get('login', 'Auth\AuthController@getLogin');
+    Route::post('login', 'Auth\AuthController@postLogin');
+    Route::get('logout', 'Auth\AuthController@getLogout');
+    Route::get('register', 'Auth\AuthController@getRegister');
+    Route::post('register', 'Auth\AuthController@postRegister');
+});
+
 
 /*
- * Oauth2
+ * OAsystem Web need auth
  */
 Route::group(['middleware'=>'auth'], function (){
-    Route::get('oauth/oauth_client/user', 'OauthController@getByUser');
-    Route::get('oauth/oauth_client/create', 'OauthControler@create');
-    Route::resource('oauth/oauth_client', 'OauthController', ['only'=>[
-        'index','create','store','destroy',
-    ]]);
-    Route::post('oauth/access_token', 'OauthController@postAccessToken');
-    Route::get('user/info', 'UserController@info');
-    Route::group(['middleware'=>['check-authorization-params', 'checkAdmin']], function (){
-        Route::get('oauth/authorize', 'OauthController@getAuthorize');
-        Route::post('oauth/authorize', 'OauthController@postAuthorize');//may need csrf middleware!
-   });
+    //Oauth
+    Route::group(['prefix'=>'oauth'], function (){
+        Route::get('oauth_client/user', 'OauthController@getByUser');
+        Route::get('oauth_client/create', 'OauthController@create');
+        Route::post('oauth_client', 'OauthController@store');
+        Route::post('access_token', 'OauthController@postAccessToken');
+        Route::group(['middleware'=>'checkAdmin'], function (){
+            Route::resource('oauth_client', 'OauthController', ['only'=>[
+                'index','destroy','update',
+            ]]);
+        });
+        Route::group(['middleware'=>['check-authorization-params']], function (){
+            Route::get('authorize', 'OauthController@getAuthorize');
+            Route::post('authorize', 'OauthController@postAuthorize');//may need csrf middleware!
+        });
+    });
+
+    //user
+    Route::group(['prefix'=>'user'], function (){
+        Route::get('info', 'UserController@info');
+    });
+
 });
 
 
