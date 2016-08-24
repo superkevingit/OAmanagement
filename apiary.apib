@@ -8,6 +8,8 @@ HOST: http://oa.ecjtu.net/
   * api的使用基于oauth2，请先[前往](http://oa.ecjtu.net/oauth/oauth_client/create)注册应用。
   * 所有api的使用请携带access_token作为请求参数(除api/v1/oauth/access_token)
   * 大部分api的使用请携带token(JWT)作为请求参数（通过api/v1/user/login获得）
+  * tips : 不基于ssl的任何认证都是耍流氓
+  * tips : 获取验证码的接口 **要钱！要钱！要钱！** 用了多少次自己拿小本本记下来
   
 ## OAUTH2 [/api/v1/oauth/access_token]
 
@@ -95,4 +97,82 @@ HOST: http://oa.ecjtu.net/
                         "User_student_id": null,
                         "User_confirmed": false
                     }
+                }
+                
+
+## 获取用户验证码 [/api/v1/user/confirm?token=null;access_token=null]
+
++ Parameters
+
+    + access_token (string) - Oauth识别码
+    + token (string) - JWT识别码
+    
+### 获取验证码 [GET]
+
++ Response 200 (application/json)
+                
+                {
+                    "success": true,
+                    "time": {
+                        "started_at": "0.04885500 1472052592",
+                        "finished_at": "0.57646200 1472052592"
+                    },
+                    "logs": [
+                    {
+                        "driver": "Alidayu",
+                        "time": {
+                            "started_at": "0.04889800 1472052592",
+                            "finished_at": "0.57638500 1472052592"
+                        },
+                        "success": true,
+                        "result": {
+                            "info": "{\"err_code\":\"0\",\"model\":\"102604097718^1103315659108\",\"success\":true}",
+                            "code": "0"
+                        }
+                    }
+                    ]
+                }
+                
+                
+## 验证用户验证码 [/api/v1/user/confirm?token=null]
+
++ Parameters
+
+    + token (string) - JWT识别码
+
+### 验证验证码 [POST]
+
++ Request
+
+                {
+                    "access_token" : "wWbjWXmxiUeFBspTDhcr7TbjQ7RbLmCcao0qoX5Z",
+                    "ver" : "57413"
+                }
+                
++ Response 200 (application/json)
+
+                {
+                    "success": true,
+                    "message": "confirm success"
+                }
+                
++ Response 200 (application/json)
+
+                {
+                    "success": false,
+                    "message": "verify code expired"
+                }
+                
++ Response 200 (application/json)
+
+                {
+                    "success": false,
+                    "message": "verify code not right"
+                }
+                
++ Response 200 (application/json)
+
+                {
+                    "success": false,
+                    "message": "database update error"
                 }
