@@ -16,6 +16,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\OauthClientApply' => [
             'App\Listeners\HandleOauthClientApply',
         ],
+        'App\Events\ConfirmUser' => [
+            'App\Listeners\ChangeUserConfirmSig',
+        ],
     ];
 
     /**

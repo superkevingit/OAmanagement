@@ -10,7 +10,8 @@
         "dingo/api": "1.0.*@dev",
         "tymon/jwt-auth": "0.5.*",
         "lucadegasperi/oauth2-server-laravel": "5.1.*",
-        "toplan/laravel-sms": "2.5.*"
+        "toplan/laravel-sms": "2.5.*",
+        "predis/predis": "^1.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

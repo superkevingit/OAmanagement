@@ -15,10 +15,32 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use PhpSms;
+use Illuminate\Support\Facades\Redis;
+use App\Events\ConfirmUser;
 
 
 class AuthController extends BaseController
 {
+    public function smsCheck(Request $ver)
+    {
+        $key = 'smsconfirm:'.\Auth::user()->phone;
+        $value = Redis::get($key);
+        $ver = $ver->get('ver');
+        if (!$value)
+        {
+            return response()->json(['success'=>false, 'message'=>'verify code expired']);
+        }
+        if ($value!=$ver)
+        {
+            return response()->json(['success'=>false, 'message'=>'verify code not right']);
+        }
+        if(event(new ConfirmUser()))
+        {
+            return response()->json(['success'=>true, 'message'=>'confirm success']);
+        }
+        return response()->json(['success'=>false, 'message'=>'database update error']);
+    }
+
     public function smsConfirm()
     {
         $to = \Auth::user()->phone;
@@ -28,7 +50,13 @@ class AuthController extends BaseController
         $tempData = [
             'ver' => rand(10000, 99999),
         ];
-        $back = PhpSms::make()->to($to)->template($templates)->data($tempData)->send();
+//        $back = PhpSms::make()->to($to)->template($templates)->data($tempData)->send();
+        $back['success'] = true;
+        if ($back['success'])
+        {
+            Redis::set('smsconfirm:'.$to, $tempData['ver']);
+            Redis::expire('smsconfirm:'.$to, 300);
+        }
         return $back;
     }
 
