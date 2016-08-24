@@ -1,7 +1,6 @@
 <?php
-
 /*
- * OAsystem Web no need auth
+ * OA system Web 无需登录
  */
 Route::group(['prefix'=>'auth'], function (){
     Route::get('login', 'Auth\AuthController@getLogin');
@@ -11,9 +10,8 @@ Route::group(['prefix'=>'auth'], function (){
     Route::post('register', 'Auth\AuthController@postRegister');
 });
 
-
 /*
- * OAsystem Web need auth
+ * OA system Web 登陆后使用
  */
 Route::group(['middleware'=>'auth'], function (){
     //Oauth
@@ -22,7 +20,6 @@ Route::group(['middleware'=>'auth'], function (){
         Route::get('oauth_client/user', 'OauthController@getByUser');
         Route::get('oauth_client/create', 'OauthController@create');
         Route::post('oauth_client', 'OauthController@store');
-        Route::post('access_token', 'OauthController@postAccessToken');
         Route::group(['middleware'=>'checkAdmin'], function (){
             Route::resource('oauth_client', 'OauthController', ['only'=>[
                 'index','destroy','update',
@@ -44,7 +41,7 @@ Route::group(['middleware'=>'auth'], function (){
         });
     });
 
-    //user
+    //User
     Route::group(['prefix'=>'user'], function (){
         Route::get('info', 'UserController@info');
     });
@@ -59,13 +56,20 @@ $api = app('Dingo\Api\Routing\Router');
 
 $api->version('v1', function ($api) {
     $api->group(['namespace'=>'App\Api\Controllers', 'prefix'=>'v1'], function ($api){
+        //获取access_token
         $api->post('oauth/access_token', function() {
             return Response::json(Authorizer::issueAccessToken());
         });
 
+        /*
+         * 需要access_token
+         */
         $api->group(['middleware' =>'oauth'], function ($api){
             $api->post('user/register', 'AuthController@register');
             $api->post('user/login', 'AuthController@authenticate');
+            /*
+             * 需登录后使用，携带token
+             */
             $api->group(['middleware'=>['jwt.auth']], function ($api){
                 $api->get('user/me', 'AuthController@getAuthenticatedUser');
                 $api->get('organization_tags', 'OrganizationTagsController@index');

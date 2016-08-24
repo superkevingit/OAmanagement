@@ -8,9 +8,6 @@ use App\User;
 use Illuminate\Http\Request;
 use DB;
 
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
-
 class OauthController extends Controller
 {
     public function getCode(Request $request)
@@ -59,7 +56,6 @@ class OauthController extends Controller
         $oauth_client = OauthClient::where('secret', '=', $secret)->first();
         (new OauthClientEndpoint())->apply($oauth_client);
         (new User())->apply_oauth_client($oauth_client);
-
         return redirect(url('oauth/oauth_client/user'));
     }
 
