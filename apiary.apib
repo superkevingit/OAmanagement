@@ -38,6 +38,61 @@ HOST: http://oa.ecjtu.net/
                 }
 
 
-## 用户 [/api/v1/users]
+## 用户注册 [/api/v1/user/register]
 
-### 获取所有用户 [GET]
+### 用户注册 [POST]
+
++ Request (application/x-www-form-urlencoded)
+
+                {
+                    "access_token": "wWbjWXmxiUeFBspTDhcr7TbjQ7RbLmCcao0qoX5Z",
+                    "User_phone": "12345678911",
+                    "User_password": "iampassword"
+                }
+                
++ Response 200 (application/json)
+
+                {
+                    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjI0LCJpc3MiOiJodHRwOlwvXC9sYXJhdmVsLmRldjo4MDAwXC9hcGlcL3YxXC91c2VyXC9yZWdpc3RlciIsImlhdCI6MTQ3MjAwMTE1NiwiZXhwIjoxNDcyMDA0NzU2LCJuYmYiOjE0NzIwMDExNTYsImp0aSI6ImVkOTAzMTJlODc5M2ZlYTNjZGZkNTVlZWE2MzZiMDU4In0.-HgcTtA8gJSOPxypfhvbqDD7Z95YpRfZxQP6WtHxCKM"
+                }
+                
+                
+## 用户登录 [/api/v1/user/login]
+
+### 用户登录 [POST]
+
++ Request (application/x-www-form-urlencoded)
+
+                {
+                    "access_token": "wWbjWXmxiUeFBspTDhcr7TbjQ7RbLmCcao0qoX5Z",
+                    "phone": "12345678911",
+                    "password": "iampassword"
+                }
+                
++ Response 200 (application/json)
+
+                {
+                    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjI0LCJpc3MiOiJodHRwOlwvXC9sYXJhdmVsLmRldjo4MDAwXC9hcGlcL3YxXC91c2VyXC9sb2dpbiIsImlhdCI6MTQ3MjAwMjY0OCwiZXhwIjoxNDcyMDA2MjQ4LCJuYmYiOjE0NzIwMDI2NDgsImp0aSI6ImFmODNjMWU3NjAwZTI1ZGRiMTkxZmFiNzkwYTdkMGNjIn0.IINYpew92Wd7YWlUnom0Bo0xIaYwwrYB0mWj21sq8Ec"
+                }
+                
+                
+## 获取当前用户 [/api/v1/user/me]
+
++ Parameters
+
+    + access_token (string) - Oauth识别码
+    + token (string) - JWT识别码
+
+### 当前用户 [GET]
+
++ Response 200 (application/json)
+
+                {
+                    "data": {
+                        "User_id": 24,
+                        "User_name": "user_CG8Wxe",
+                        "User_phone": "12345678911",
+                        "User_student_id": null,
+                        "User_confirmed": false
+                    }
+                }
