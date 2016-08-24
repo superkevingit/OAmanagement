@@ -7,7 +7,7 @@ HOST: http://oa.ecjtu.net/
 
   * api的使用基于oauth2，请先[前往](http://oa.ecjtu.net/oauth/oauth_client/create)注册应用。
   * 所有api的使用请携带access_token作为请求参数(除api/v1/oauth/access_token)
-  * 大部分api的使用请携带token作为请求参数（通过api/v1/user/login获得）
+  * 大部分api的使用请携带token(JWT)作为请求参数（通过api/v1/user/login获得）
   
 ## OAUTH2 [/api/v1/oauth/access_token]
 
@@ -76,7 +76,7 @@ HOST: http://oa.ecjtu.net/
                 }
                 
                 
-## 获取当前用户 [/api/v1/user/me]
+## 获取当前用户 [/api/v1/user/me?access_token=null;token=null]
 
 + Parameters
 
