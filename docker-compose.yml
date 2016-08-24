@@ -1,0 +1,20 @@
+oa:
+    image: hitalos/laravel:latest
+    ports:
+        - 8080:80
+    volumes:
+        - ./:/var/www
+    links:
+        - db
+    environment:
+        DB_HOST: oa_db
+        DB_DATABASE: oa
+        DB_USERNAME: root
+        DB_PASSWORD: 123
+        DB_CONNECTION: mysql
+db:
+    image: mysql:5.6
+    environment:
+        MYSQL_DATABASE: oa
+        MYSQL_USER: root
+        MYSQL_PASSWORD: 123

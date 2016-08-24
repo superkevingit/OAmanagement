@@ -59,16 +59,18 @@ $api = app('Dingo\Api\Routing\Router');
 
 $api->version('v1', function ($api) {
     $api->group(['namespace'=>'App\Api\Controllers', 'prefix'=>'v1'], function ($api){
-        $api->post('user/register', 'AuthController@register');
-        $api->post('user/login', 'AuthController@authenticate');
         $api->post('oauth/access_token', function() {
             return Response::json(Authorizer::issueAccessToken());
         });
 
-        $api->group(['middleware'=>['jwt.auth', 'oauth']], function ($api){
-            $api->get('user/me', 'AuthController@getAuthenticatedUser');
-            $api->get('organization_tags', 'OrganizationTagsController@index');
-            $api->get('organization_tags/{id}', 'OrganizationTagsController@show');
+        $api->group(['middleware' =>'oauth'], function ($api){
+            $api->post('user/register', 'AuthController@register');
+            $api->post('user/login', 'AuthController@authenticate');
+            $api->group(['middleware'=>['jwt.auth']], function ($api){
+                $api->get('user/me', 'AuthController@getAuthenticatedUser');
+                $api->get('organization_tags', 'OrganizationTagsController@index');
+                $api->get('organization_tags/{id}', 'OrganizationTagsController@show');
+            });
         });
     });
 });

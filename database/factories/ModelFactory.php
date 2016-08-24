@@ -30,11 +30,3 @@ $factory->define(App\OrganizationTag::class, function (Faker\Generator $faker) {
         'updated_at' => \Carbon\Carbon::now(),
     ];
 });
-
-$factory->define(App\OauthClient::class, function (Faker\Generator $faker) {
-    return [
-        'id' =>str_random(38),
-        'secret' => str_random(38),
-        'name' => $faker->word,
-    ];
-});
