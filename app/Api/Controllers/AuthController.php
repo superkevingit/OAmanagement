@@ -14,10 +14,24 @@ use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
+use PhpSms;
 
 
 class AuthController extends BaseController
 {
+    public function smsConfirm()
+    {
+        $to = \Auth::user()->phone;
+        $templates = [
+            'Alidayu' => env('ALIDAYU_VERIFY_TEMPLATE_ID'),
+        ];
+        $tempData = [
+            'ver' => rand(10000, 99999),
+        ];
+        $back = PhpSms::make()->to($to)->template($templates)->data($tempData)->send();
+        return $back;
+    }
+
     public function authenticate(Request $request)
     {
         $credentials = $request->only('phone', 'password');
