@@ -28,21 +28,25 @@ class AuthController extends BaseController
         $ver = $ver->get('ver');
         if (!$value)
         {
-            return response()->json(['success'=>false, 'message'=>'verify code expired']);
+            return response()->json(['success'=>false, 'message'=>'verify code expired'], 403);
         }
         if ($value!=$ver)
         {
-            return response()->json(['success'=>false, 'message'=>'verify code not right']);
+            return response()->json(['success'=>false, 'message'=>'verify code not right'], 403);
         }
         if(event(new ConfirmUser()))
         {
             return response()->json(['success'=>true, 'message'=>'confirm success']);
         }
-        return response()->json(['success'=>false, 'message'=>'database update error']);
+        return response()->json(['success'=>false, 'message'=>'database update error'], 408);
     }
 
     public function smsConfirm()
     {
+        if (\Auth::user()->confirmed)
+        {
+            return response()->json(['success'=>false, 'message'=>'account has confirmed'], 403);
+        }
         $to = \Auth::user()->phone;
         $templates = [
             'Alidayu' => env('ALIDAYU_VERIFY_TEMPLATE_ID'),

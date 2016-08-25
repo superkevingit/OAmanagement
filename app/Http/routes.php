@@ -71,8 +71,8 @@ $api->version('v1', function ($api) {
              * 需登录后使用，携带token
              */
             $api->group(['middleware'=>['jwt.auth']], function ($api){
-                $api->post('user/confirm', 'AuthController@smsConfirm');
-                $api->post('user/confirm_check', 'AuthController@smsCheck');
+                $api->get('user/confirm', 'AuthController@smsConfirm');
+                $api->post('user/confirm', 'AuthController@smsCheck');
                 $api->get('user/me', 'AuthController@getAuthenticatedUser');
                 $api->get('organization_tags', 'OrganizationTagsController@index');
                 $api->get('organization_tags/{id}', 'OrganizationTagsController@show');
