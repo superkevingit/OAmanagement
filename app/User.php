@@ -39,6 +39,11 @@ AuthenticatableContract,
     protected $hidden = ['password', 'remember_token'];
     public $oauth_client;
 
+    public function organizations()
+    {
+        return $this->belongsToMany('App\Organization', 'user_organization')->withTimestamps()->withPivot('identity');
+    }
+
     public function oauth_clients()
     {
         return $this->belongsToMany('App\OauthClient', 'user_oauth_client')->withTimestamps()->withPivot('confirmed');

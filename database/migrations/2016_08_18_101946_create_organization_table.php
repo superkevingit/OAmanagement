@@ -17,7 +17,6 @@ class CreateOrganizationTable extends Migration
             $table->string('name')->index();
             $table->integer('owner_id')->unsigned()->nullable();
             $table->integer('fid')->nullable()->unsigned();
-            $table->integer('organization_tag_id')->nullable()->unsigned();
             $table->boolean('confirmed')->default(false);
             $table->timestamps();
         });

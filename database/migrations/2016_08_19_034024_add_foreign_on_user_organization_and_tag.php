@@ -15,7 +15,6 @@ class AddForeignOnUserOrganizationAndTag extends Migration
         Schema::table('organizations', function (Blueprint $table) {
             $table->foreign('fid')->references('id')->on('organizations')->onDelete('cascade');
             $table->foreign('owner_id')->references('id')->on('users')->onDelete('set null');
-            $table->foreign('organization_tag_id')->references('id')->on('organization_tags')->onDelete('set null');
         });
     }
 

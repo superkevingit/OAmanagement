@@ -2,7 +2,7 @@
 
 namespace App\Http;
 
-use App\Http\Middleware\checkAdmin;
+use App\Http\Middleware\webCheckAdmin as WebCheckAdmin;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -31,13 +31,13 @@ class Kernel extends HttpKernel
     protected $routeMiddleware = [
         'auth'                       => \App\Http\Middleware\Authenticate::class,
         'auth.basic'                 => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-        'guest'                      => \App\Http\Middleware\RedirectIfAuthenticated::class,
+//        'guest'                      => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'jwt.auth'                   => \Tymon\JWTAuth\Middleware\GetUserFromToken::class,
         'jwt.refresh'                => \Tymon\JWTAuth\Middleware\RefreshToken::class,
         'oauth'                      => \LucaDegasperi\OAuth2Server\Middleware\OAuthMiddleware::class,
         'oauth-user'                 => \LucaDegasperi\OAuth2Server\Middleware\OAuthUserOwnerMiddleware::class,
         'oauth-client'               => \LucaDegasperi\OAuth2Server\Middleware\OAuthClientOwnerMiddleware::class,
         'check-authorization-params' => \LucaDegasperi\OAuth2Server\Middleware\CheckAuthCodeRequestMiddleware::class,
-        'checkAdmin'                 => checkAdmin::class,
+        'webCheckAdmin'                 => WebCheckAdmin::class,
     ];
 }

@@ -23,7 +23,7 @@ class OauthClient extends Model
 
     public function users()
     {
-        return $this->belongsToMany('App\User', 'user_oauth_client')/*->withTimestamps()*/->withPivot('confirmed');
+        return $this->belongsToMany('App\User', 'user_oauth_client')->withTimestamps()->withPivot('confirmed');
     }
 
     public function endpoints()

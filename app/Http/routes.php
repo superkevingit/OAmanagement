@@ -13,6 +13,7 @@ Route::group(['prefix' => 'auth'], function () {
 /*
  * OA system Web 登陆后使用
  */
+//Auth::loginUsingId(1);
 Route::group(['middleware' => 'auth'], function () {
     //Oauth
     Route::group(['prefix' => 'oauth'], function () {
@@ -20,7 +21,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('oauth_client/user', 'OauthController@getByUser');
         Route::get('oauth_client/create', 'OauthController@create');
         Route::post('oauth_client', 'OauthController@store');
-        Route::group(['middleware' => 'checkAdmin'], function () {
+        Route::group(['middleware' => 'webCheckAdmin'], function () {
             Route::resource('oauth_client', 'OauthController', ['only' => [
                 'index', 'destroy', 'update',
             ]]);
@@ -45,6 +46,12 @@ Route::group(['middleware' => 'auth'], function () {
     //User
     Route::group(['prefix' => 'user'], function () {
         Route::get('info', 'UserController@info');
+        Route::group(['prefix'=> 'password'], function (){
+            Route::get('email', 'Auth\PasswordController@getEmail');
+            Route::post('email', 'Auth\PasswordController@postEmail');
+            Route::get('reset/{token}', 'Auth\PasswordController@getReset');
+            Route::post('reset', 'Auth\PasswordController@postReset');
+        });
     });
 });
 
@@ -71,11 +78,14 @@ $api->version('v1', function ($api) {
              * 需登录后使用，携带token
              */
             $api->group(['middleware' => ['jwt.auth']], function ($api) {
+                //user
                 $api->get('user/confirm', 'AuthController@smsConfirm');
                 $api->post('user/confirm', 'AuthController@smsCheck');
                 $api->get('user/me', 'AuthController@getAuthenticatedUser');
+                //organization tag
                 $api->get('organization_tags', 'OrganizationTagsController@index');
                 $api->get('organization_tags/{id}', 'OrganizationTagsController@show');
+                //organization
             });
         });
     });

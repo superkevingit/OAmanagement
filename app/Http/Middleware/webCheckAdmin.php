@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-class checkAdmin
+class webCheckAdmin
 {
     /**
      * Handle an incoming request.
