@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateOrganizationTable extends Migration
 {
@@ -20,7 +20,6 @@ class CreateOrganizationTable extends Migration
             $table->integer('organization_tag_id')->nullable()->unsigned();
             $table->boolean('confirmed')->default(false);
             $table->timestamps();
-
         });
     }
 

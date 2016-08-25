@@ -3,8 +3,6 @@
 namespace App\Listeners;
 
 use App\Events\ConfirmUser;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class ChangeUserConfirmSig
 {
@@ -21,12 +19,14 @@ class ChangeUserConfirmSig
     /**
      * Handle the event.
      *
-     * @param  ConfirmUser  $event
+     * @param ConfirmUser $event
+     *
      * @return void
      */
     public function handle(ConfirmUser $event)
     {
         $user = \Auth::user()->update(['confirmed' => 1]);
+
         return $user;
     }
 }

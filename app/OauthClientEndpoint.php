@@ -12,7 +12,7 @@ class OauthClientEndpoint extends Model
 
     public function apply(OauthClient $oauth_client)
     {
-        $oauth_client->endpoints()->save(new OauthClientEndpoint([
+        $oauth_client->endpoints()->save(new self([
             'redirect_uri' => url('oauth/oauth_client').'/code',
         ]));
     }
