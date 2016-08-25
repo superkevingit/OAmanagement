@@ -46,7 +46,7 @@ Route::group(['middleware' => 'auth'], function () {
     //User
     Route::group(['prefix' => 'user'], function () {
         Route::get('info', 'UserController@info');
-        Route::group(['prefix'=> 'password'], function (){
+        Route::group(['prefix' => 'password'], function () {
             Route::get('email', 'Auth\PasswordController@getEmail');
             Route::post('email', 'Auth\PasswordController@postEmail');
             Route::get('reset/{token}', 'Auth\PasswordController@getReset');

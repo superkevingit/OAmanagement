@@ -32,12 +32,12 @@ class Kernel extends HttpKernel
         'auth'                       => \App\Http\Middleware\Authenticate::class,
         'auth.basic'                 => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
 //        'guest'                      => \App\Http\Middleware\RedirectIfAuthenticated::class,
-        'jwt.auth'                   => \Tymon\JWTAuth\Middleware\GetUserFromToken::class,
-        'jwt.refresh'                => \Tymon\JWTAuth\Middleware\RefreshToken::class,
-        'oauth'                      => \LucaDegasperi\OAuth2Server\Middleware\OAuthMiddleware::class,
-        'oauth-user'                 => \LucaDegasperi\OAuth2Server\Middleware\OAuthUserOwnerMiddleware::class,
-        'oauth-client'               => \LucaDegasperi\OAuth2Server\Middleware\OAuthClientOwnerMiddleware::class,
-        'check-authorization-params' => \LucaDegasperi\OAuth2Server\Middleware\CheckAuthCodeRequestMiddleware::class,
+        'jwt.auth'                      => \Tymon\JWTAuth\Middleware\GetUserFromToken::class,
+        'jwt.refresh'                   => \Tymon\JWTAuth\Middleware\RefreshToken::class,
+        'oauth'                         => \LucaDegasperi\OAuth2Server\Middleware\OAuthMiddleware::class,
+        'oauth-user'                    => \LucaDegasperi\OAuth2Server\Middleware\OAuthUserOwnerMiddleware::class,
+        'oauth-client'                  => \LucaDegasperi\OAuth2Server\Middleware\OAuthClientOwnerMiddleware::class,
+        'check-authorization-params'    => \LucaDegasperi\OAuth2Server\Middleware\CheckAuthCodeRequestMiddleware::class,
         'webCheckAdmin'                 => WebCheckAdmin::class,
     ];
 }
