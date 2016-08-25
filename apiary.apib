@@ -9,7 +9,8 @@ HOST: http://oa.ecjtu.net/
   * 所有api的使用请携带access_token作为请求参数(除api/v1/oauth/access_token)
   * 大部分api的使用请携带token(JWT)作为请求参数（通过api/v1/user/login获得）
   * tips : 不基于ssl的任何认证都是耍流氓
-  * tips : 获取验证码的接口 **要钱！要钱！要钱！** 用了多少次自己拿小本本记下来
+  * tips : 获取验证码的接口 **要钱！要钱！要钱** (用了多少次自己拿小本本记下来)
+  
   
 ## OAUTH2 [/api/v1/oauth/access_token]
 
@@ -27,11 +28,6 @@ HOST: http://oa.ecjtu.net/
 
 + Response 200 (application/json)
 
-    + Headers
-    
-                ETag: 4d31f1fe87715aa106c1e22f128b0dee
-    
-    + Body
     
                 {
                   "access_token": "wWbjWXmxiUeFBspTDhcr7TbjQ7RbLmCcao0qoX5Z",
@@ -140,6 +136,7 @@ HOST: http://oa.ecjtu.net/
                     "message": "account has confirmed"
                 }
                 
+                
 ## 验证用户验证码 [/api/v1/user/confirm?token=null]
 
 + Parameters
@@ -181,4 +178,48 @@ HOST: http://oa.ecjtu.net/
                 {
                     "success": false,
                     "message": "database update error"
+                }
+                
+                
+## 为社团添加标签 [/api/v1/organization_tag?access_token=null;token=null]
+
++ Parameters
+
+    + access_token (string) - Oauth识别码
+    + token (string) - JWT识别码
+    
+### 添加标签 [GET]
+
++ Response 200 (application/json)
+                
+                {
+                  "data": [
+                    {
+                          "OrgTag_id": 1,
+                          "OrgTag_name": "科技",
+                          "OrgTag_created_at": {
+                            "date": "2016-08-23 07:54:31.000000",
+                            "timezone_type": 3,
+                            "timezone": "Asia/Shanghai"
+                      }
+                    },
+                    {
+                          "OrgTag_id": 2,
+                          "OrgTag_name": "绘画",
+                          "OrgTag_created_at": {
+                            "date": "2016-08-23 07:54:31.000000",
+                            "timezone_type": 3,
+                            "timezone": "Asia/Shanghai"
+                      }
+                    },
+                    {
+                          "OrgTag_id": 3,
+                          "OrgTag_name": "二次元",
+                          "OrgTag_created_at": {
+                            "date": "2016-08-23 07:54:31.000000",
+                            "timezone_type": 3,
+                            "timezone": "Asia/Shanghai"
+                      }
+                    },
+                  ]
                 }
