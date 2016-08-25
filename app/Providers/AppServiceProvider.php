@@ -14,7 +14,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         \Carbon\Carbon::setLocale('zh');
-        $this->app->singleton(\Faker\Generator::class, function (){
+        $this->app->singleton(\Faker\Generator::class, function () {
             return \Faker\Factory::create('zh_CN');
         });
     }

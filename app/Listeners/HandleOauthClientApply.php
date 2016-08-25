@@ -3,8 +3,6 @@
 namespace App\Listeners;
 
 use App\Events\OauthClientApply;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class HandleOauthClientApply
 {
@@ -21,7 +19,8 @@ class HandleOauthClientApply
     /**
      * Handle the event.
      *
-     * @param  OauthClientApply  $event
+     * @param OauthClientApply $event
+     *
      * @return void
      */
     public function handle(OauthClientApply $event)

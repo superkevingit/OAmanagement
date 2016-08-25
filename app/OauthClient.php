@@ -12,11 +12,12 @@ class OauthClient extends Model
 
     public function apply($app_name)
     {
-        $oauth_client = OauthClient::create([
-            'id' => str_random(38),
+        $oauth_client = self::create([
+            'id'     => str_random(38),
             'secret' => str_random(38),
-            'name' => $app_name,
+            'name'   => $app_name,
         ]);
+
         return $oauth_client->secret;
     }
 

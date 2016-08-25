@@ -3,21 +3,20 @@
  * Created by PhpStorm.
  * User: zaxk
  * Date: 2016/8/20
- * Time: 14:06
+ * Time: 14:06.
  */
-
 namespace App\Api\Controllers;
+
 use App\Api\Transformers\UsersTransformer;
+use App\Events\ConfirmUser;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
 use JWTAuth;
+use PhpSms;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
-use PhpSms;
-use Illuminate\Support\Facades\Redis;
-use App\Events\ConfirmUser;
-
 
 class AuthController extends BaseController
 {
@@ -26,26 +25,23 @@ class AuthController extends BaseController
         $key = 'smsconfirm:'.\Auth::user()->phone;
         $value = Redis::get($key);
         $ver = $ver->get('ver');
-        if (!$value)
-        {
-            return response()->json(['success'=>false, 'message'=>'verify code expired'], 403);
+        if (!$value) {
+            return response()->json(['success' => false, 'message' => 'verify code expired'], 403);
         }
-        if ($value!=$ver)
-        {
-            return response()->json(['success'=>false, 'message'=>'verify code not right'], 403);
+        if ($value != $ver) {
+            return response()->json(['success' => false, 'message' => 'verify code not right'], 403);
         }
-        if(event(new ConfirmUser()))
-        {
-            return response()->json(['success'=>true, 'message'=>'confirm success']);
+        if (event(new ConfirmUser())) {
+            return response()->json(['success' => true, 'message' => 'confirm success']);
         }
-        return response()->json(['success'=>false, 'message'=>'database update error'], 408);
+
+        return response()->json(['success' => false, 'message' => 'database update error'], 408);
     }
 
     public function smsConfirm()
     {
-        if (\Auth::user()->confirmed)
-        {
-            return response()->json(['success'=>false, 'message'=>'account has confirmed'], 403);
+        if (\Auth::user()->confirmed) {
+            return response()->json(['success' => false, 'message' => 'account has confirmed'], 403);
         }
         $to = \Auth::user()->phone;
         $templates = [
@@ -56,11 +52,11 @@ class AuthController extends BaseController
         ];
 //        $back = PhpSms::make()->to($to)->template($templates)->data($tempData)->send();
         $back['success'] = true;
-        if ($back['success'])
-        {
+        if ($back['success']) {
             Redis::set('smsconfirm:'.$to, $tempData['ver']);
             Redis::expire('smsconfirm:'.$to, 300);
         }
+
         return $back;
     }
 
@@ -68,7 +64,7 @@ class AuthController extends BaseController
     {
         $credentials = $request->only('phone', 'password');
         try {
-            if (! $token = JWTAuth::attempt($credentials)) {
+            if (!$token = JWTAuth::attempt($credentials)) {
                 return response()->json(['error' => 'invalid_credentials'], 401);
             }
         } catch (JWTException $e) {
@@ -80,20 +76,21 @@ class AuthController extends BaseController
 
     public function register(Request $request)
     {
-       $newUser = [
-           'phone' => $request->get('User_phone'),
-           'name' => 'user_'.str_random(6),
+        $newUser = [
+           'phone'    => $request->get('User_phone'),
+           'name'     => 'user_'.str_random(6),
            'password' => bcrypt($request->get('User_password')),
        ];
         $user = User::create($newUser);
         $token = JWTAuth::fromUser($user);
+
         return response()->json(compact('token'));
     }
 
     public function getAuthenticatedUser()
     {
         try {
-            if (! $user = JWTAuth::parseToken()->authenticate()) {
+            if (!$user = JWTAuth::parseToken()->authenticate()) {
                 return response()->json(['user_not_found'], 404);
             }
         } catch (TokenExpiredException $e) {
