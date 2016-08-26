@@ -6,7 +6,7 @@
     <div class="contanier">
         <div class="col-md-9" role="main">
             <h1 align="center">注册应用</h1>
-            <form method="POST" action="{{ 'oauth/oauth_client' }}">
+            <form method="POST" action="/oauth/oauth_client">
                 {!! csrf_field() !!}
                 <div class="form-group">
                     <label for="name" class="col-sm-2 control-label">应用名称</label>
