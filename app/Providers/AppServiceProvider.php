@@ -17,6 +17,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(\Faker\Generator::class, function () {
             return \Faker\Factory::create('zh_CN');
         });
+        $this->app['request']->server->set('HTTPS', true);
     }
 
     /**
