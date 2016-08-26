@@ -40,14 +40,14 @@
                                     @if(!$user['pivot']['confirmed'])
                                         <td><span class="label label-danger">未审核</span></td>
                                         <td>
-                                                <form method="POST" action="{{ url('oauth/oauth_client',['oauth_client'=>$oauth_client['id']]) }}" accept-charset="UTF-8">
+                                                <form method="POST" action="{{ secure_url('oauth/oauth_client',['oauth_client'=>$oauth_client['id']]) }}" accept-charset="UTF-8">
                                                     <input name="_method" type="hidden" value="PATCH" />
                                                     {!! csrf_field() !!}
                                                     <input type="submit" class="btn btn-primary" value="通过"/>
                                                 </form>
                                         </td>
                                         <td>
-                                            <form method="POST" action="{{ url('oauth/oauth_client',['oauth_client'=>$oauth_client['id']]) }}" accept-charset="UTF-8">
+                                            <form method="POST" action="{{ secure_url('oauth/oauth_client',['oauth_client'=>$oauth_client['id']]) }}" accept-charset="UTF-8">
                                                 <input name="_method" type="hidden" value="DELETE" />
                                                 {!! csrf_field() !!}
                                                 <input type="submit" class="btn btn-primary" value="删除"/>
@@ -56,14 +56,14 @@
                                     @else
                                         <td><span class="label label-success">已审核</span></td>
                                         <td>
-                                            <form method="POST" action="{{ url('oauth/oauth_client',['oauth_client'=>$oauth_client['id']]) }}" accept-charset="UTF-8">
+                                            <form method="POST" action="{{ secure_url('oauth/oauth_client',['oauth_client'=>$oauth_client['id']]) }}" accept-charset="UTF-8">
                                                 <input name="_method" type="hidden" value="PATCH" />
                                                 {!! csrf_field() !!}
                                                 <input type="submit" class="btn btn-primary" disabled="disabled" value="通过"/>
                                             </form>
                                         </td>
                                         <td>
-                                            <form method="POST" action="{{ url('oauth/oauth_client',['oauth_client'=>$oauth_client['id']]) }}" accept-charset="UTF-8">
+                                            <form method="POST" action="{{ secure_url('oauth/oauth_client',['oauth_client'=>$oauth_client['id']]) }}" accept-charset="UTF-8">
                                                 <input name="_method" type="hidden" value="DELETE" />
                                                 {!! csrf_field() !!}
                                                 <input type="submit" class="btn btn-primary" value="删除"/>
