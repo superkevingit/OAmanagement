@@ -1,4 +1,7 @@
 <?php
+Route::get('/', function (){
+    return 'welcome to oa system';
+});
 /*
  * OA system Web 无需登录
  */

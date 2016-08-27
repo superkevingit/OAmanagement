@@ -46,7 +46,7 @@ class AuthController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'phone'    => 'required|max:255',
+            'phone'    => 'required|digits:11|unique:users',
             'password' => 'required|confirmed|min:6',
         ]);
     }
@@ -61,7 +61,7 @@ class AuthController extends Controller
     protected function create(array $data)
     {
         return User::create([
-            'name'     => 'user_'.str_random(6),
+            'name'     => 'user_'.str_random(6).substr(time(), -2),
             'phone'    => $data['phone'],
             'password' => bcrypt($data['password']),
         ]);
